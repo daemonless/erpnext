@@ -1,0 +1,22 @@
+icon: ':material-office-building:'
+
+cit:
+  compose: true
+  mode: screenshot
+  port: 8080
+  health: /api/method/ping
+  # The login page is a small card on a large empty background, so it has far
+  # fewer edges than dbuild's 0.005 default expects (measured 0.004005).
+  edge_threshold: 0.003
+  # bench new-site creates the schema and installs erpnext on first boot
+  wait: 600
+
+# The compose service is host-networked, so it publishes no ports for dbuild to
+# read; this is the documented fallback that feeds the Containerfile template.
+ports:
+  - port: 8080
+
+build:
+  variants:
+    - tag: latest
+      containerfile: Containerfile

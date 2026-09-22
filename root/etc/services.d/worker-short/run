@@ -1,0 +1,4 @@
+#!/bin/sh
+BENCH_DIR="${BENCH_DIR:-/app/frappe-bench}"
+cd "${BENCH_DIR}"
+exec s6-setuidgid bsd bench worker --queue short,default

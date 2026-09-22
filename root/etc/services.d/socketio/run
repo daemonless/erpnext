@@ -1,0 +1,4 @@
+#!/bin/sh
+BENCH_DIR="${BENCH_DIR:-/app/frappe-bench}"
+cd "${BENCH_DIR}/sites"
+exec s6-setuidgid bsd node "${BENCH_DIR}/apps/frappe/socketio.js"

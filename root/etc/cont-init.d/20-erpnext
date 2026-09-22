@@ -1,0 +1,80 @@
+#!/bin/sh
+# Seed the sites volume and bootstrap the site on first run.
+set -e
+
+BENCH_DIR="${BENCH_DIR:-/app/frappe-bench}"
+SITE_NAME="${SITE_NAME:-erpnext.localhost}"
+
+# sites/ is the mounted volume; seed it from the image template on first run.
+for f in apps.json apps.txt common_site_config.json; do
+    [ -e "${BENCH_DIR}/sites/${f}" ] || \
+        cp "${BENCH_DIR}/sites-template/${f}" "${BENCH_DIR}/sites/${f}"
+done
+
+# Assets live in the image, so relink them into the volume after an upgrade.
+ln -sfn "${BENCH_DIR}/assets" "${BENCH_DIR}/sites/assets"
+chown -R bsd:bsd "${BENCH_DIR}/sites" "${BENCH_DIR}/logs" 2>/dev/null || true
+
+# frappe picks the site from X-Frappe-Site-Name and ignores the URL, so the
+# configured name is baked into nginx.conf; using $host would 404 on any
+# address that isn't literally the site name.
+sed -i '' "s/__SITE_NAME__/${SITE_NAME}/g" /usr/local/etc/nginx/nginx.conf
+
+cd "${BENCH_DIR}"
+
+# podman starts the whole stack at once (and so does podman's rc.d at boot), so
+# MariaDB is usually still running mariadb-install-db when we get here. bench
+# has no retry of its own -- it raises straight out and, under `set -e`, takes
+# the container with it.  MariaDB's own init runs --skip-networking, so a bound
+# port really does mean "ready", not "starting".
+wait_for() {
+    _host="$1" _port="$2" _what="$3" _left="${DEP_WAIT_TIMEOUT:-180}"
+    while ! nc -z "${_host}" "${_port}" 2>/dev/null; do
+        _left=$((_left - 2))
+        if [ "${_left}" -le 0 ]; then
+            echo "[erpnext] ${_what} at ${_host}:${_port} never came up" >&2
+            return 1
+        fi
+        sleep 2
+    done
+    echo "[erpnext] ${_what} is up at ${_host}:${_port}"
+}
+
+# redis://host:port/db -> host port, with redis' default port when it is omitted.
+wait_for_redis() {
+    _hp="${1#redis://}"
+    _hp="${_hp%%/*}"
+    case "${_hp}" in
+        *:*) wait_for "${_hp%:*}" "${_hp##*:}" "$2" ;;
+        *)   wait_for "${_hp}" 6379 "$2" ;;
+    esac
+}
+
+wait_for "${DB_HOST:-mariadb}" "${DB_PORT:-3306}" "database"
+wait_for_redis "${REDIS_CACHE:-redis://redis:6379/0}" "redis cache"
+wait_for_redis "${REDIS_QUEUE:-redis://redis:6379/1}" "redis queue"
+
+# common_site_config.json holds the shared db/redis wiring for every site.
+s6-setuidgid bsd bench set-config -g db_host "${DB_HOST:-mariadb}"
+s6-setuidgid bsd bench set-config -gp db_port "${DB_PORT:-3306}"
+s6-setuidgid bsd bench set-config -g redis_cache "${REDIS_CACHE:-redis://redis:6379/0}"
+s6-setuidgid bsd bench set-config -g redis_queue "${REDIS_QUEUE:-redis://redis:6379/1}"
+s6-setuidgid bsd bench set-config -g redis_socketio "${REDIS_QUEUE:-redis://redis:6379/1}"
+s6-setuidgid bsd bench set-config -gp socketio_port "${SOCKETIO_PORT:-9000}"
+
+if [ ! -d "${BENCH_DIR}/sites/${SITE_NAME}" ]; then
+    if [ -z "${DB_ROOT_PASSWORD}" ] || [ -z "${ADMIN_PASSWORD}" ]; then
+        echo "[erpnext] first run needs DB_ROOT_PASSWORD and ADMIN_PASSWORD" >&2
+        exit 1
+    fi
+    echo "[erpnext] creating site ${SITE_NAME}"
+    s6-setuidgid bsd bench new-site "${SITE_NAME}" \
+        --db-root-username "${DB_ROOT_USER:-root}" \
+        --db-root-password "${DB_ROOT_PASSWORD}" \
+        --admin-password "${ADMIN_PASSWORD}" \
+        --install-app erpnext \
+        --set-default
+else
+    echo "[erpnext] site ${SITE_NAME} exists; running migrations"
+    s6-setuidgid bsd bench --site "${SITE_NAME}" migrate
+fi

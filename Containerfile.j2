@@ -1,0 +1,142 @@
+ARG BASE_VERSION=15.1-latest
+
+ARG FRAPPE_BRANCH=version-15
+ARG ERPNEXT_BRANCH=version-15
+ARG BENCH_DIR=/app/frappe-bench
+
+# --- builder ---------------------------------------------------------------
+FROM ghcr.io/daemonless/base:${BASE_VERSION} AS builder
+
+ARG FRAPPE_BRANCH
+ARG ERPNEXT_BRANCH
+ARG BENCH_DIR
+
+# frappe v15 pins Pillow~=12.3.0, cryptography~=50.0.0 and WeasyPrint==69.0;
+# only the latest pkg branch carries those exact versions (quarterly is 11.3 /
+# 48.0 / 61.2), hence BASE_VERSION=15.1-latest.
+RUN pkg update && \
+    pkg install -y \
+      python3 py312-pip py312-setuptools py312-wheel \
+      py312-pillow py312-cryptography py312-lxml py312-cffi py312-psycopg2 \
+      py312-weasyprint py312-pyyaml py312-markupsafe \
+      node22 npm-node22 yarn-node22 git-tiny jq \
+      rust cmake pkgconf gmake \
+      FreeBSD-clang FreeBSD-clang-dev FreeBSD-clibs-dev FreeBSD-toolchain \
+      FreeBSD-runtime-dev FreeBSD-utilities-dev FreeBSD-openssl-dev \
+      FreeBSD-zlib-dev FreeBSD-libexecinfo-dev FreeBSD-audit-dev \
+      cairo pango harfbuzz mariadb114-client && \
+    pkg clean -ay && rm -rf /var/cache/pkg/* /var/db/pkg/repos/*
+
+ENV BENCH_DISABLE_UV=1
+
+# duckdb_sync's natives: pyarrow 25 can't build (ports Arrow C++ is 24) and
+# duckdb 1.4.3 would compile its amalgamation, but frappe only touches
+# pa.Table/schema/scalar-type constructors and duckdb.connect -- stable for many
+# majors -- so the packaged versions serve and the pins get relaxed below.
+RUN pkg update && pkg install -y py312-pyarrow py312-duckdb && \
+    pkg clean -ay && rm -rf /var/cache/pkg/* /var/db/pkg/repos/*
+
+# A bench dir is just these paths plus a venv; building it by hand (rather than
+# `bench init`) is what lets frappe's pins be patched before it is installed.
+RUN mkdir -p ${BENCH_DIR}/apps ${BENCH_DIR}/sites ${BENCH_DIR}/config/pids ${BENCH_DIR}/logs && \
+    python3 -m venv --system-site-packages ${BENCH_DIR}/env && \
+    ${BENCH_DIR}/env/bin/pip install --no-cache-dir --upgrade pip setuptools wheel
+
+RUN git clone --depth 1 -b ${FRAPPE_BRANCH} https://github.com/frappe/frappe \
+      ${BENCH_DIR}/apps/frappe && \
+    sed -i '' -E \
+      -e 's/"pyarrow~=25\.0\.0"/"pyarrow>=24.0.0"/' \
+      -e 's/"duckdb~=1\.4\.3"/"duckdb>=1.4.3"/' \
+      ${BENCH_DIR}/apps/frappe/pyproject.toml && \
+    grep -E '"(pyarrow|duckdb)' ${BENCH_DIR}/apps/frappe/pyproject.toml && \
+    ${BENCH_DIR}/env/bin/pip install --no-cache-dir -e ${BENCH_DIR}/apps/frappe && \
+    echo frappe > ${BENCH_DIR}/sites/apps.txt && \
+    echo '{"frappe_user": "bsd"}' > ${BENCH_DIR}/sites/common_site_config.json
+
+# frappe-bench must live in the venv, not system site-packages: with
+# --system-site-packages pip would treat its deps (semantic-version, GitPython,
+# Jinja2, requests) as satisfying frappe's and skip them, and the runtime stage
+# copies only the bench tree. --no-deps keeps its uv~=0.11.6 pin out.
+RUN ${BENCH_DIR}/env/bin/pip install --no-cache-dir --no-deps frappe-bench && \
+    ${BENCH_DIR}/env/bin/pip install --no-cache-dir honcho python-crontab
+ENV PATH="${BENCH_DIR}/env/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin"
+
+# `bench init` would have done this as part of installing frappe; building the
+# bench dir by hand means frappe's own node_modules (esbuild needs fast-glob)
+# has to be installed explicitly. erpnext's are handled by `bench get-app`.
+RUN cd ${BENCH_DIR}/apps/frappe && yarn install --check-files
+
+# bench refuses to run as root unless common_site_config.json names a
+# frappe_user to drop to; it also sets HOME to that user's home (/config here),
+# where the node/yarn caches for `bench build` land.
+RUN chown -R bsd:bsd ${BENCH_DIR} /config
+
+WORKDIR ${BENCH_DIR}
+RUN bench get-app --branch=${ERPNEXT_BRANCH} --resolve-deps --skip-assets \
+      erpnext https://github.com/frappe/erpnext
+
+RUN bench build --production && \
+    ${BENCH_DIR}/env/bin/python -c "import frappe, erpnext; print('frappe', frappe.__version__, 'erpnext', erpnext.__version__)" && \
+    ${BENCH_DIR}/env/bin/python -c "import erpnext; print(erpnext.__version__)" > /tmp/app-version
+
+# node_modules stays: the socketio service requires socket.io at runtime.
+RUN find ${BENCH_DIR}/apps -mindepth 1 -path "*/.git" -prune -exec rm -rf {} + && \
+    rm -rf /root/.cache /root/.cargo /root/.npm /root/.yarn /config/.cache
+
+# --- runtime ---------------------------------------------------------------
+FROM ghcr.io/daemonless/base:${BASE_VERSION}
+
+ARG FREEBSD_ARCH=amd64
+ARG BENCH_DIR
+ARG PACKAGES="python3 py312-pillow py312-cryptography py312-lxml py312-cffi py312-psycopg2 py312-weasyprint py312-pyyaml py312-markupsafe py312-pyarrow py312-duckdb node22 nginx git-tiny bash mariadb114-client cairo pango harfbuzz ca_root_nss"
+ARG HEALTHCHECK_ENDPOINT="http://localhost:{{ ports[0].port }}/api/method/ping"
+
+ENV HEALTHCHECK_URL="${HEALTHCHECK_ENDPOINT}"
+ENV BENCH_DIR=${BENCH_DIR}
+ENV PATH="${BENCH_DIR}/env/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin"
+
+LABEL org.opencontainers.image.title="{{ title }}" \
+      org.opencontainers.image.description="{{ description }}" \
+      org.opencontainers.image.source="{{ repo_url }}" \
+      org.opencontainers.image.url="{{ web_url }}" \
+      org.opencontainers.image.documentation="https://docs.frappe.io/erpnext" \
+      org.opencontainers.image.licenses="GPL-3.0" \
+      org.opencontainers.image.vendor="daemonless" \
+      org.opencontainers.image.authors="daemonless" \
+      io.daemonless.category="{{ category }}" \
+      io.daemonless.port="{{ ports[0].port }}" \
+      io.daemonless.volumes="${BENCH_DIR}/sites" \
+      io.daemonless.arch="${FREEBSD_ARCH}" \
+      io.daemonless.pkg-source="source" \
+      io.daemonless.upstream-url="https://api.github.com/repos/frappe/erpnext/releases/latest" \
+      io.daemonless.upstream-jq='.tag_name | sub("^v"; "")' \
+      io.daemonless.healthcheck-url="${HEALTHCHECK_ENDPOINT}" \
+      io.daemonless.packages="${PACKAGES}"
+
+RUN pkg update -r FreeBSD-base && pkg upgrade -y -r FreeBSD-base && \
+    pkg clean -ay && rm -rf /var/cache/pkg/* /var/db/pkg/repos/*
+
+RUN pkg update && pkg install -y ${PACKAGES} && \
+    pkg clean -ay && rm -rf /var/cache/pkg/* /var/db/pkg/repos/*
+
+COPY --from=builder --chown=bsd:bsd ${BENCH_DIR} ${BENCH_DIR}
+COPY --from=builder /tmp/app-version /app/version
+
+# sites/ is the state dir and is the volume itself -- it cannot be a symlink to
+# /config, because frappe builds its log path as "../logs" relative to sites and
+# the kernel resolves ".." on the physical path (a symlink lands it in /logs).
+# Its image-time contents are kept as a template cont-init seeds into an empty
+# volume, the way upstream's entrypoint does.
+RUN mv ${BENCH_DIR}/sites/assets ${BENCH_DIR}/assets && \
+    cp -a ${BENCH_DIR}/sites ${BENCH_DIR}/sites-template && \
+    mkdir -p /config && \
+    chown -R bsd:bsd ${BENCH_DIR} ${BENCH_DIR}/sites-template /config /app/version && \
+    chmod a+r /app/version
+
+COPY root/ /
+
+RUN chmod +x /etc/services.d/*/run /etc/cont-init.d/* /healthz 2>/dev/null || true
+
+EXPOSE {{ ports[0].port }}
+
+VOLUME ${BENCH_DIR}/sites

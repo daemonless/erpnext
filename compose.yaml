@@ -1,0 +1,171 @@
+name: erpnext
+
+x-daemonless:
+  title: "ERPNext"
+  icon: ":material-office-building:"
+  category: "Productivity"
+  description: "Open source ERP: accounting, inventory, manufacturing, CRM, HR and projects, built on the Frappe framework."
+  upstream_url: "https://github.com/frappe/erpnext"
+  web_url: "https://erpnext.com/"
+  freshports_url: ""
+  user: "bsd"
+  mlock: false
+  community: "Discord:https://discord.gg/Kb9tkhecZT"
+  # MariaDB and Redis sidecars for the AppJail director bundle; host networking
+  # so ERPNext reaches both on localhost, as it does under podman.
+  appjail:
+    director:
+      options:
+        - alias:
+        - ip4_inherit:
+    depends_on:
+      - name: erpnext-mariadb
+        image: ghcr.io/daemonless/mariadb:11.4
+        volumes:
+          mariadb_data: /config
+      - name: erpnext-redis
+        image: ghcr.io/daemonless/redis:latest
+        volumes:
+          redis_data: /config
+
+  docs:
+    manual: true
+    env:
+      PUID: "User ID for the application process"
+      PGID: "Group ID for the application process"
+      TZ: "Timezone for the container"
+      SITE_NAME:
+        desc: "Frappe site to create and serve. Any hostname reaches it -- nginx sends this name to the backend -- so it need not resolve in DNS."
+        level: primary
+      ADMIN_PASSWORD:
+        desc: "Password for the 'Administrator' account. Required on first run only, when the site is created."
+        level: primary
+      DB_ROOT_PASSWORD:
+        desc: "MariaDB root password, used once to create the site's database and user. Must match the database's own root password. Required on first run only."
+        level: primary
+      DB_HOST: "MariaDB host (localhost with host networking)"
+      DB_PORT: "MariaDB port"
+      DB_ROOT_USER:
+        desc: "MariaDB superuser used to create the site database"
+        optional: true
+      REDIS_CACHE: "Redis URL for the cache, e.g. redis://127.0.0.1:6379/0"
+      REDIS_QUEUE: "Redis URL for the job queue and realtime, e.g. redis://127.0.0.1:6379/1"
+      SOCKETIO_PORT:
+        desc: "Port for the realtime (socket.io) service, proxied at /socket.io"
+        optional: true
+      GUNICORN_WORKERS:
+        desc: "Web worker processes (default 2)"
+        optional: true
+      GUNICORN_THREADS:
+        desc: "Threads per web worker (default 4)"
+        optional: true
+      GUNICORN_TIMEOUT:
+        desc: "Seconds before a request is killed (default 120); raise for long reports"
+        optional: true
+      DEP_WAIT_TIMEOUT:
+        desc: "Seconds to wait for MariaDB and Redis to accept connections before giving up (default 180)"
+        optional: true
+    volumes:
+      /app/frappe-bench/sites: "Site data: database config, uploaded files, private files and per-site logs"
+    ports:
+      8080: "Web UI"
+
+  notes: |
+    ## First run
+
+    Creating the site takes several minutes -- ERPNext installs its full schema
+    and then processes a large batch of background jobs. The web UI answers
+    before that finishes; if you land on *"Setting up your system"*, let it
+    finish and reload.
+
+    `ADMIN_PASSWORD` and `DB_ROOT_PASSWORD` are read only when the site is first
+    created. On every later start the container runs `bench migrate` against the
+    existing site instead, so changing them afterwards has no effect -- use the
+    UI to change the Administrator password.
+
+    Log in as **Administrator** with the `ADMIN_PASSWORD` you set.
+
+    ## Hostnames
+
+    Frappe picks the site from the `X-Frappe-Site-Name` header rather than the
+    URL, and this image sends `SITE_NAME` for every request. Any address that
+    reaches the container works -- `http://server.lan:8080`, an IP, or a reverse
+    proxy -- without `SITE_NAME` resolving in DNS.
+
+    ## Database
+
+    Use **MariaDB 11.4** -- the version this image is tested against. Frappe v15
+    prints a warning for anything above 10.8, but it is only a warning, and it
+    covers every MariaDB the registry ships (10.11 included).
+
+    Frappe creates its own database as `utf8mb4`, so the server's default
+    character set does not matter.
+
+    PostgreSQL is not supported by this image; ERPNext itself only targets
+    MariaDB.
+
+    ## Backups
+
+    `bench` writes backups inside the volume:
+
+    ```bash
+    podman exec erpnext bench --site "$SITE_NAME" backup --with-files
+    ```
+
+    Archives land in `/app/frappe-bench/sites/<site>/private/backups`.
+
+    ## Not available on FreeBSD
+
+    The **DuckDB sync** doctype is unavailable. Frappe pins `pyarrow~=25.0.0`,
+    whose bindings will not compile against the Arrow C++ 24 that FreeBSD ports
+    carries. Everything else -- accounting, stock, manufacturing, CRM, HR,
+    projects, print formats -- is unaffected.
+
+services:
+  erpnext:
+    image: ghcr.io/daemonless/erpnext:latest
+    container_name: erpnext
+    # "always", not "unless-stopped": FreeBSD's podman rc.d only auto-starts
+    # containers with restart-policy=always at boot (needs podman_enable=YES).
+    restart: always
+    network_mode: host
+
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=UTC
+      - SITE_NAME=erpnext.localhost
+      - ADMIN_PASSWORD=changeme
+      - DB_HOST=127.0.0.1
+      - DB_PORT=3306
+      - DB_ROOT_PASSWORD=changeme
+      - REDIS_CACHE=redis://127.0.0.1:6379/0
+      - REDIS_QUEUE=redis://127.0.0.1:6379/1
+
+    volumes:
+      - /path/to/containers/erpnext:/app/frappe-bench/sites
+
+    depends_on:
+      - mariadb
+      - redis
+
+  mariadb:
+    image: ghcr.io/daemonless/mariadb:11.4
+    container_name: erpnext-mariadb
+    restart: always
+    network_mode: host
+    environment:
+      - MYSQL_ROOT_PASSWORD=changeme
+      - TZ=UTC
+    volumes:
+      - /path/to/containers/erpnext-mariadb:/config
+
+  redis:
+    image: ghcr.io/daemonless/redis:latest
+    container_name: erpnext-redis
+    restart: always
+    network_mode: host
+    environment:
+      - TZ=UTC
+    volumes:
+      - /path/to/containers/erpnext-redis:/config

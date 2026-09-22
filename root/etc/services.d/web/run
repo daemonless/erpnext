@@ -1,0 +1,13 @@
+#!/bin/sh
+# gunicorn serving frappe's WSGI app; nginx fronts it.
+BENCH_DIR="${BENCH_DIR:-/app/frappe-bench}"
+cd "${BENCH_DIR}/sites"
+exec s6-setuidgid bsd "${BENCH_DIR}/env/bin/gunicorn" \
+    --chdir="${BENCH_DIR}/sites" \
+    --bind=127.0.0.1:8000 \
+    --threads="${GUNICORN_THREADS:-4}" \
+    --workers="${GUNICORN_WORKERS:-2}" \
+    --worker-class=gthread \
+    --timeout="${GUNICORN_TIMEOUT:-120}" \
+    --preload \
+    frappe.app:application

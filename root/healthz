@@ -1,0 +1,2 @@
+#!/bin/sh
+fetch -qo /dev/null "http://127.0.0.1:8080/api/method/ping" >/dev/null 2>&1

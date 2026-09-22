@@ -1,0 +1,4 @@
+#!/bin/sh
+# Public entrypoint: serves baked assets, proxies the rest to gunicorn/socketio.
+s6-ready-when /healthz
+exec nginx -g "daemon off;"

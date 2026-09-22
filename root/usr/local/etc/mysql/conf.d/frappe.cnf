@@ -1,0 +1,8 @@
+# bench shells out to mariadb/mariadb-dump for new-site, restore and backup.
+# The 11.4 client enforces TLS and aborts against a server without it
+# ("ERROR 2026: SSL is required, but the server does not support it"), while
+# frappe's own driver (pymysql) connects without TLS either way -- so the CLI
+# is the odd one out, not the fix.  [client] covers mariadb-dump too.  A site
+# that sets db_ssl_* in site_config can still pass --ssl per invocation.
+[client]
+skip-ssl
