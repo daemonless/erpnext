@@ -1,11 +1,11 @@
 {
-  "generated": "2026-09-22T20:11:20Z",
+  "generated": "2026-09-22T21:40:45Z",
   "image": "erpnext",
   "tags": {
     "latest": {
       "app_version": "15.121.3",
       "arch": "amd64",
-      "generated": "2026-09-22T20:07:43Z",
+      "generated": "2026-09-22T21:37:05Z",
       "packages": {
         "dotnet": [],
         "freebsd": [
