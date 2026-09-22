@@ -17,7 +17,7 @@ Open source ERP: accounting, inventory, manufacturing, CRM, HR and projects, bui
 
 | Tag | Description | Best For |
 | :--- | :--- | :--- |
-| `latest` | **Built from source**. Frappe and ERPNext `version-15`. | Most users. |
+| `latest` / `15` | **Built from source**. Frappe and ERPNext `version-15`. | Most users. |
 
 ## Prerequisites
 

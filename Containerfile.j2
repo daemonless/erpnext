@@ -117,8 +117,8 @@ LABEL org.opencontainers.image.title="{{ title }}" \
       io.daemonless.volumes="${BENCH_DIR}/sites" \
       io.daemonless.arch="${FREEBSD_ARCH}" \
       io.daemonless.pkg-source="source" \
-      io.daemonless.upstream-url="https://api.github.com/repos/frappe/erpnext/releases/latest" \
-      io.daemonless.upstream-jq='.tag_name | sub("^v"; "")' \
+      io.daemonless.upstream-url="https://api.github.com/repos/frappe/erpnext/releases?per_page=50" \
+      io.daemonless.upstream-jq='[.[] | select(.tag_name | startswith("v15."))][0].tag_name | sub("^v"; "")' \
       io.daemonless.healthcheck-url="${HEALTHCHECK_ENDPOINT}" \
       io.daemonless.packages="${PACKAGES}"
 
