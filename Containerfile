@@ -78,7 +78,9 @@ RUN cd ${BENCH_DIR}/apps/frappe && yarn install --check-files
 RUN chown -R bsd:bsd ${BENCH_DIR} /config
 
 WORKDIR ${BENCH_DIR}
-RUN bench get-app --branch=${ERPNEXT_BRANCH} --resolve-deps --skip-assets \
+
+RUN mkdir -p ${BENCH_DIR}/apps ${BENCH_DIR}/sites ${BENCH_DIR}/config/pids ${BENCH_DIR}/logs && \
+    bench get-app --branch=${ERPNEXT_BRANCH} --resolve-deps --skip-assets \
       erpnext https://github.com/frappe/erpnext
 
 RUN bench build --production && \
@@ -135,7 +137,7 @@ COPY --from=builder /tmp/app-version /app/version
 # volume, the way upstream's entrypoint does.
 RUN mv ${BENCH_DIR}/sites/assets ${BENCH_DIR}/assets && \
     cp -a ${BENCH_DIR}/sites ${BENCH_DIR}/sites-template && \
-    mkdir -p /config && \
+    mkdir -p /config ${BENCH_DIR}/logs ${BENCH_DIR}/config/pids && \
     chown -R bsd:bsd ${BENCH_DIR} ${BENCH_DIR}/sites-template /config /app/version && \
     chmod a+r /app/version
 
