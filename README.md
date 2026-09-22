@@ -5,6 +5,8 @@
 
 Open source ERP: accounting, inventory, manufacturing, CRM, HR and projects, built on the Frappe framework.
 
+![ERPNext accounts dashboard](https://daemonless.io/images/screenshots/erpnext/image1f5eff.png)
+
 | | |
 |---|---|
 | **Registry** | `ghcr.io/daemonless/erpnext` |
@@ -98,6 +100,8 @@ podman-compose up -d
 
 Access ERPNext at **http://your-host:8080** and log in as
 **Administrator** with the `ADMIN_PASSWORD` you set.
+
+### Interactive Configuration
 
 <div class="placeholder-settings-panel"></div>
 
