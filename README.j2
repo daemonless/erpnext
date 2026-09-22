@@ -28,75 +28,106 @@ in the stack below.
 
 ## Deploy
 
-**1.** Save as `.env`:
+=== ":material-docker: Podman"
 
-```env { data-zip-bundle="erpnext-podman" data-zip-filename=".env" }
-SITES_LOCATION=@CONTAINER_CONFIG_ROOT@/@ERPNEXT_SITES_PATH@
-DB_DATA_LOCATION=@CONTAINER_CONFIG_ROOT@/erpnext-mariadb
-REDIS_DATA_LOCATION=@CONTAINER_CONFIG_ROOT@/erpnext-redis
-SITE_NAME=erpnext.localhost
-DB_ROOT_PASSWORD=changeme
-ADMIN_PASSWORD=changeme
-```
+    === ":material-file-document-outline: Compose"
 
-**2.** Save as `compose.yaml`:
+        **1.** Save as `.env`:
 
-```yaml { data-zip-bundle="erpnext-podman" data-zip-filename="compose.yaml" }
-name: erpnext
+        ```env { data-zip-bundle="erpnext-podman" data-zip-filename=".env" }
+        SITES_LOCATION=@CONTAINER_CONFIG_ROOT@/@ERPNEXT_SITES_PATH@
+        DB_DATA_LOCATION=@CONTAINER_CONFIG_ROOT@/erpnext-mariadb
+        REDIS_DATA_LOCATION=@CONTAINER_CONFIG_ROOT@/erpnext-redis
+        SITE_NAME=erpnext.localhost
+        DB_ROOT_PASSWORD=changeme
+        ADMIN_PASSWORD=changeme
+        ```
 
-services:
-  erpnext:
-    image: {{ registry }}/erpnext:latest
-    container_name: erpnext
-    network_mode: host
-    # always (not unless-stopped) so FreeBSD's podman rc.d auto-starts it at boot
-    restart: always
-    environment:
-      PUID: "@PUID@"
-      PGID: "@PGID@"
-      TZ: "@TZ@"
-      SITE_NAME: ${SITE_NAME}
-      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
-      DB_HOST: 127.0.0.1
-      DB_PORT: "3306"
-      DB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
-      REDIS_CACHE: redis://127.0.0.1:6379/0
-      REDIS_QUEUE: redis://127.0.0.1:6379/1
-    volumes:
-      - ${SITES_LOCATION}:/app/frappe-bench/sites
-    depends_on:
-      - mariadb
-      - redis
+        **2.** Save as `compose.yaml`:
 
-  mariadb:
-    image: {{ registry }}/mariadb:11.4
-    container_name: erpnext-mariadb
-    network_mode: host
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
-      TZ: "@TZ@"
-    volumes:
-      - ${DB_DATA_LOCATION}:/config
+        ```yaml { data-zip-bundle="erpnext-podman" data-zip-filename="compose.yaml" }
+        name: erpnext
 
-  redis:
-    image: {{ registry }}/redis:latest
-    container_name: erpnext-redis
-    network_mode: host
-    restart: always
-    environment:
-      TZ: "@TZ@"
-    volumes:
-      - ${REDIS_DATA_LOCATION}:/config
-```
+        services:
+          erpnext:
+            image: {{ registry }}/erpnext:latest
+            container_name: erpnext
+            network_mode: host
+            # always (not unless-stopped) so FreeBSD's podman rc.d auto-starts it at boot
+            restart: always
+            environment:
+              PUID: "@PUID@"
+              PGID: "@PGID@"
+              TZ: "@TZ@"
+              SITE_NAME: ${SITE_NAME}
+              ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+              DB_HOST: 127.0.0.1
+              DB_PORT: "3306"
+              DB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+              REDIS_CACHE: redis://127.0.0.1:6379/0
+              REDIS_QUEUE: redis://127.0.0.1:6379/1
+            volumes:
+              - ${SITES_LOCATION}:/app/frappe-bench/sites
+            depends_on:
+              - mariadb
+              - redis
 
-**3.** Deploy:
+          mariadb:
+            image: {{ registry }}/mariadb:11.4
+            container_name: erpnext-mariadb
+            network_mode: host
+            restart: always
+            environment:
+              MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+              TZ: "@TZ@"
+            volumes:
+              - ${DB_DATA_LOCATION}:/config
 
-```bash
-mkdir -p @CONTAINER_CONFIG_ROOT@/@ERPNEXT_SITES_PATH@ @CONTAINER_CONFIG_ROOT@/erpnext-mariadb @CONTAINER_CONFIG_ROOT@/erpnext-redis
-chown -R @PUID@:@PGID@ @CONTAINER_CONFIG_ROOT@/@ERPNEXT_SITES_PATH@
-podman-compose up -d
-```
+          redis:
+            image: {{ registry }}/redis:latest
+            container_name: erpnext-redis
+            network_mode: host
+            restart: always
+            environment:
+              TZ: "@TZ@"
+            volumes:
+              - ${REDIS_DATA_LOCATION}:/config
+        ```
+
+        **3.** Deploy:
+
+        ```bash
+        mkdir -p @CONTAINER_CONFIG_ROOT@/@ERPNEXT_SITES_PATH@ @CONTAINER_CONFIG_ROOT@/erpnext-mariadb @CONTAINER_CONFIG_ROOT@/erpnext-redis
+        chown -R @PUID@:@PGID@ @CONTAINER_CONFIG_ROOT@/@ERPNEXT_SITES_PATH@
+        podman-compose up -d
+        ```
+
+=== ":appjail-appjail: AppJail"
+
+    !!! warning
+        Exposing ports in AppJail means that your service can be reached from remote hosts. If that is not your intention, do not expose the ports and communicate with the service using the jail's IPv4 address or hostname assigned by the virtual network.
+
+    === ":material-file-document-outline: Director"
+
+        **.env**:
+
+        ```
+        {% filter indent(8) %}{% include 'appjail.env.j2' %}{% endfilter %}
+        ```
+
+        **appjail-director.yml**:
+
+        ```yaml
+        {% filter indent(8) %}{% include 'appjail-director.yml.j2' %}{% endfilter %}
+        ```
+
+        **Makejail**:
+
+        ```
+        {% filter indent(8) %}{% include 'Makejail.j2' %}{% endfilter %}
+        ```
+
+        Save the files above, then run `appjail-director up`.
 
 Access ERPNext at **http://your-host:{{ ports[0].port }}** and log in as
 **Administrator** with the `ADMIN_PASSWORD` you set.
@@ -104,28 +135,6 @@ Access ERPNext at **http://your-host:{{ ports[0].port }}** and log in as
 ### Interactive Configuration
 
 <div class="placeholder-settings-panel"></div>
-
-## AppJail Director
-
-**.env**:
-
-```
-{% include 'appjail.env.j2' %}
-```
-
-**appjail-director.yml**:
-
-```yaml
-{% include 'appjail-director.yml.j2' %}
-```
-
-**Makejail**:
-
-```
-{% include 'Makejail.j2' %}
-```
-
-Save the files above, then run `appjail-director up`.
 
 ## First run
 

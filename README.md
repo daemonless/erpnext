@@ -28,75 +28,182 @@ in the stack below.
 
 ## Deploy
 
-**1.** Save as `.env`:
+=== ":material-docker: Podman"
 
-```env { data-zip-bundle="erpnext-podman" data-zip-filename=".env" }
-SITES_LOCATION=@CONTAINER_CONFIG_ROOT@/@ERPNEXT_SITES_PATH@
-DB_DATA_LOCATION=@CONTAINER_CONFIG_ROOT@/erpnext-mariadb
-REDIS_DATA_LOCATION=@CONTAINER_CONFIG_ROOT@/erpnext-redis
-SITE_NAME=erpnext.localhost
-DB_ROOT_PASSWORD=changeme
-ADMIN_PASSWORD=changeme
-```
+    === ":material-file-document-outline: Compose"
 
-**2.** Save as `compose.yaml`:
+        **1.** Save as `.env`:
 
-```yaml { data-zip-bundle="erpnext-podman" data-zip-filename="compose.yaml" }
-name: erpnext
+        ```env { data-zip-bundle="erpnext-podman" data-zip-filename=".env" }
+        SITES_LOCATION=@CONTAINER_CONFIG_ROOT@/@ERPNEXT_SITES_PATH@
+        DB_DATA_LOCATION=@CONTAINER_CONFIG_ROOT@/erpnext-mariadb
+        REDIS_DATA_LOCATION=@CONTAINER_CONFIG_ROOT@/erpnext-redis
+        SITE_NAME=erpnext.localhost
+        DB_ROOT_PASSWORD=changeme
+        ADMIN_PASSWORD=changeme
+        ```
 
-services:
-  erpnext:
-    image: ghcr.io/daemonless/erpnext:latest
-    container_name: erpnext
-    network_mode: host
-    # always (not unless-stopped) so FreeBSD's podman rc.d auto-starts it at boot
-    restart: always
-    environment:
-      PUID: "@PUID@"
-      PGID: "@PGID@"
-      TZ: "@TZ@"
-      SITE_NAME: ${SITE_NAME}
-      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
-      DB_HOST: 127.0.0.1
-      DB_PORT: "3306"
-      DB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
-      REDIS_CACHE: redis://127.0.0.1:6379/0
-      REDIS_QUEUE: redis://127.0.0.1:6379/1
-    volumes:
-      - ${SITES_LOCATION}:/app/frappe-bench/sites
-    depends_on:
-      - mariadb
-      - redis
+        **2.** Save as `compose.yaml`:
 
-  mariadb:
-    image: ghcr.io/daemonless/mariadb:11.4
-    container_name: erpnext-mariadb
-    network_mode: host
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
-      TZ: "@TZ@"
-    volumes:
-      - ${DB_DATA_LOCATION}:/config
+        ```yaml { data-zip-bundle="erpnext-podman" data-zip-filename="compose.yaml" }
+        name: erpnext
 
-  redis:
-    image: ghcr.io/daemonless/redis:latest
-    container_name: erpnext-redis
-    network_mode: host
-    restart: always
-    environment:
-      TZ: "@TZ@"
-    volumes:
-      - ${REDIS_DATA_LOCATION}:/config
-```
+        services:
+          erpnext:
+            image: ghcr.io/daemonless/erpnext:latest
+            container_name: erpnext
+            network_mode: host
+            # always (not unless-stopped) so FreeBSD's podman rc.d auto-starts it at boot
+            restart: always
+            environment:
+              PUID: "@PUID@"
+              PGID: "@PGID@"
+              TZ: "@TZ@"
+              SITE_NAME: ${SITE_NAME}
+              ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+              DB_HOST: 127.0.0.1
+              DB_PORT: "3306"
+              DB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+              REDIS_CACHE: redis://127.0.0.1:6379/0
+              REDIS_QUEUE: redis://127.0.0.1:6379/1
+            volumes:
+              - ${SITES_LOCATION}:/app/frappe-bench/sites
+            depends_on:
+              - mariadb
+              - redis
 
-**3.** Deploy:
+          mariadb:
+            image: ghcr.io/daemonless/mariadb:11.4
+            container_name: erpnext-mariadb
+            network_mode: host
+            restart: always
+            environment:
+              MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+              TZ: "@TZ@"
+            volumes:
+              - ${DB_DATA_LOCATION}:/config
 
-```bash
-mkdir -p @CONTAINER_CONFIG_ROOT@/@ERPNEXT_SITES_PATH@ @CONTAINER_CONFIG_ROOT@/erpnext-mariadb @CONTAINER_CONFIG_ROOT@/erpnext-redis
-chown -R @PUID@:@PGID@ @CONTAINER_CONFIG_ROOT@/@ERPNEXT_SITES_PATH@
-podman-compose up -d
-```
+          redis:
+            image: ghcr.io/daemonless/redis:latest
+            container_name: erpnext-redis
+            network_mode: host
+            restart: always
+            environment:
+              TZ: "@TZ@"
+            volumes:
+              - ${REDIS_DATA_LOCATION}:/config
+        ```
+
+        **3.** Deploy:
+
+        ```bash
+        mkdir -p @CONTAINER_CONFIG_ROOT@/@ERPNEXT_SITES_PATH@ @CONTAINER_CONFIG_ROOT@/erpnext-mariadb @CONTAINER_CONFIG_ROOT@/erpnext-redis
+        chown -R @PUID@:@PGID@ @CONTAINER_CONFIG_ROOT@/@ERPNEXT_SITES_PATH@
+        podman-compose up -d
+        ```
+
+=== ":appjail-appjail: AppJail"
+
+    !!! warning
+        Exposing ports in AppJail means that your service can be reached from remote hosts. If that is not your intention, do not expose the ports and communicate with the service using the jail's IPv4 address or hostname assigned by the virtual network.
+
+    === ":material-file-document-outline: Director"
+
+        **.env**:
+
+        ```
+        # .env
+
+        DIRECTOR_PROJECT=erpnext
+        PUID=1000
+        PGID=1000
+        TZ=UTC
+        SITE_NAME=erpnext.localhost
+        ADMIN_PASSWORD=changeme
+        DB_HOST=127.0.0.1
+        DB_PORT=3306
+        DB_ROOT_PASSWORD=changeme
+        REDIS_CACHE=redis://127.0.0.1:6379/0
+        REDIS_QUEUE=redis://127.0.0.1:6379/1
+        DB_ROOT_USER=
+        SOCKETIO_PORT=
+        GUNICORN_WORKERS=
+        GUNICORN_THREADS=
+        GUNICORN_TIMEOUT=
+        DEP_WAIT_TIMEOUT=
+        ```
+
+        **appjail-director.yml**:
+
+        ```yaml
+        # appjail-director.yml
+
+        options:
+          - alias:
+          - ip4_inherit:
+        services:
+          erpnext:
+            name: erpnext
+            options:
+              - container: 'args:--pull'
+              - expose: ':8080 proto:tcp'
+            oci:
+              user: root
+              environment:
+                - PUID: !ENV '${PUID}'
+                - PGID: !ENV '${PGID}'
+                - TZ: !ENV '${TZ}'
+                - SITE_NAME: !ENV '${SITE_NAME}'
+                - ADMIN_PASSWORD: !ENV '${ADMIN_PASSWORD}'
+                - DB_HOST: !ENV '${DB_HOST}'
+                - DB_PORT: !ENV '${DB_PORT}'
+                - DB_ROOT_PASSWORD: !ENV '${DB_ROOT_PASSWORD}'
+                - REDIS_CACHE: !ENV '${REDIS_CACHE}'
+                - REDIS_QUEUE: !ENV '${REDIS_QUEUE}'
+                - DB_ROOT_USER: !ENV '${DB_ROOT_USER}'
+                - SOCKETIO_PORT: !ENV '${SOCKETIO_PORT}'
+                - GUNICORN_WORKERS: !ENV '${GUNICORN_WORKERS}'
+                - GUNICORN_THREADS: !ENV '${GUNICORN_THREADS}'
+                - GUNICORN_TIMEOUT: !ENV '${GUNICORN_TIMEOUT}'
+                - DEP_WAIT_TIMEOUT: !ENV '${DEP_WAIT_TIMEOUT}'
+            volumes:
+              - erpnext_sites: /app/frappe-bench/sites
+          erpnext-mariadb:
+            name: erpnext_mariadb
+            options:
+              - from: ghcr.io/daemonless/mariadb:11.4
+              - template: !ENV '${PWD}/template.conf'
+            volumes:
+              - mariadb_data: /config
+          erpnext-redis:
+            name: erpnext_redis
+            options:
+              - from: ghcr.io/daemonless/redis:latest
+              - template: !ENV '${PWD}/template.conf'
+            volumes:
+              - redis_data: /config
+        volumes:
+          erpnext_sites:
+            device: '/erpnext/sites'
+          mariadb_data:
+            device: !ENV '${MARIADB_DATA_LOCATION}'
+          redis_data:
+            device: !ENV '${REDIS_DATA_LOCATION}'
+        ```
+
+        **Makejail**:
+
+        ```
+        # Makejail
+
+        ARG tag=latest
+
+        OPTION container=boot
+        OPTION overwrite=force
+        OPTION from=ghcr.io/daemonless/erpnext:${tag}
+        ```
+
+        Save the files above, then run `appjail-director up`.
 
 Access ERPNext at **http://your-host:8080** and log in as
 **Administrator** with the `ADMIN_PASSWORD` you set.
@@ -104,104 +211,6 @@ Access ERPNext at **http://your-host:8080** and log in as
 ### Interactive Configuration
 
 <div class="placeholder-settings-panel"></div>
-
-## AppJail Director
-
-**.env**:
-
-```
-# .env
-
-DIRECTOR_PROJECT=erpnext
-PUID=1000
-PGID=1000
-TZ=UTC
-SITE_NAME=erpnext.localhost
-ADMIN_PASSWORD=changeme
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_ROOT_PASSWORD=changeme
-REDIS_CACHE=redis://127.0.0.1:6379/0
-REDIS_QUEUE=redis://127.0.0.1:6379/1
-DB_ROOT_USER=
-SOCKETIO_PORT=
-GUNICORN_WORKERS=
-GUNICORN_THREADS=
-GUNICORN_TIMEOUT=
-DEP_WAIT_TIMEOUT=
-```
-
-**appjail-director.yml**:
-
-```yaml
-# appjail-director.yml
-
-options:
-  - alias:
-  - ip4_inherit:
-services:
-  erpnext:
-    name: erpnext
-    options:
-      - container: 'args:--pull'
-      - expose: ':8080 proto:tcp'
-    oci:
-      user: root
-      environment:
-        - PUID: !ENV '${PUID}'
-        - PGID: !ENV '${PGID}'
-        - TZ: !ENV '${TZ}'
-        - SITE_NAME: !ENV '${SITE_NAME}'
-        - ADMIN_PASSWORD: !ENV '${ADMIN_PASSWORD}'
-        - DB_HOST: !ENV '${DB_HOST}'
-        - DB_PORT: !ENV '${DB_PORT}'
-        - DB_ROOT_PASSWORD: !ENV '${DB_ROOT_PASSWORD}'
-        - REDIS_CACHE: !ENV '${REDIS_CACHE}'
-        - REDIS_QUEUE: !ENV '${REDIS_QUEUE}'
-        - DB_ROOT_USER: !ENV '${DB_ROOT_USER}'
-        - SOCKETIO_PORT: !ENV '${SOCKETIO_PORT}'
-        - GUNICORN_WORKERS: !ENV '${GUNICORN_WORKERS}'
-        - GUNICORN_THREADS: !ENV '${GUNICORN_THREADS}'
-        - GUNICORN_TIMEOUT: !ENV '${GUNICORN_TIMEOUT}'
-        - DEP_WAIT_TIMEOUT: !ENV '${DEP_WAIT_TIMEOUT}'
-    volumes:
-      - erpnext_sites: /app/frappe-bench/sites
-  erpnext-mariadb:
-    name: erpnext_mariadb
-    options:
-      - from: ghcr.io/daemonless/mariadb:11.4
-      - template: !ENV '${PWD}/template.conf'
-    volumes:
-      - mariadb_data: /config
-  erpnext-redis:
-    name: erpnext_redis
-    options:
-      - from: ghcr.io/daemonless/redis:latest
-      - template: !ENV '${PWD}/template.conf'
-    volumes:
-      - redis_data: /config
-volumes:
-  erpnext_sites:
-    device: '/erpnext/sites'
-  mariadb_data:
-    device: !ENV '${MARIADB_DATA_LOCATION}'
-  redis_data:
-    device: !ENV '${REDIS_DATA_LOCATION}'
-```
-
-**Makejail**:
-
-```
-# Makejail
-
-ARG tag=latest
-
-OPTION container=boot
-OPTION overwrite=force
-OPTION from=ghcr.io/daemonless/erpnext:${tag}
-```
-
-Save the files above, then run `appjail-director up`.
 
 ## First run
 
