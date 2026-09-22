@@ -72,16 +72,23 @@ ENV PATH="${BENCH_DIR}/env/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin
 # has to be installed explicitly. erpnext's are handled by `bench get-app`.
 RUN cd ${BENCH_DIR}/apps/frappe && yarn install --check-files
 
+# `bench get-app` is only a clone + editable install + apps.txt/apps.json entry,
+# and it refuses to run unless it recognises the bench dir -- a check that fails
+# in CI on a tree that is correct. frappe is already installed by hand here, so
+# do the same for erpnext and drop the dependency on that check.
+RUN git clone --depth 1 -b ${ERPNEXT_BRANCH} https://github.com/frappe/erpnext \
+      ${BENCH_DIR}/apps/erpnext && \
+    ${BENCH_DIR}/env/bin/pip install --no-cache-dir -e ${BENCH_DIR}/apps/erpnext && \
+    printf 'frappe\nerpnext' > ${BENCH_DIR}/sites/apps.txt && \
+    cd ${BENCH_DIR}/apps/erpnext && yarn install --check-files && \
+    ${BENCH_DIR}/env/bin/python -c "import json, frappe, erpnext; json.dump({'frappe': {'resolution': {'commit_hash': None, 'branch': None}, 'required': [], 'idx': 1, 'version': frappe.__version__}, 'erpnext': {'resolution': {'commit_hash': None, 'branch': None}, 'required': [], 'idx': 2, 'version': erpnext.__version__}}, open('${BENCH_DIR}/sites/apps.json', 'w'), indent=4)"
+
 # bench refuses to run as root unless common_site_config.json names a
 # frappe_user to drop to; it also sets HOME to that user's home (/config here),
 # where the node/yarn caches for `bench build` land.
 RUN chown -R bsd:bsd ${BENCH_DIR} /config
 
 WORKDIR ${BENCH_DIR}
-
-RUN mkdir -p ${BENCH_DIR}/apps ${BENCH_DIR}/sites ${BENCH_DIR}/config/pids ${BENCH_DIR}/logs && \
-    bench get-app --branch=${ERPNEXT_BRANCH} --resolve-deps --skip-assets \
-      erpnext https://github.com/frappe/erpnext
 
 RUN bench build --production && \
     ${BENCH_DIR}/env/bin/python -c "import frappe, erpnext; print('frappe', frappe.__version__, 'erpnext', erpnext.__version__)" && \
