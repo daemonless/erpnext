@@ -1,11 +1,11 @@
 {
-  "generated": "2026-09-22T21:40:45Z",
+  "generated": "2026-09-24T08:45:20Z",
   "image": "erpnext",
   "tags": {
     "latest": {
-      "app_version": "15.121.3",
+      "app_version": "15.121.4",
       "arch": "amd64",
-      "generated": "2026-09-22T21:37:05Z",
+      "generated": "2026-09-24T08:41:35Z",
       "packages": {
         "dotnet": [],
         "freebsd": [
@@ -4310,7 +4310,7 @@
           {
             "name": "erpnext",
             "purl": "",
-            "version": "15.121.3"
+            "version": "15.121.4"
           },
           {
             "name": "et_xmlfile",
@@ -4600,7 +4600,7 @@
           {
             "name": "phonenumbers",
             "purl": "",
-            "version": "9.0.39"
+            "version": "9.0.40"
           },
           {
             "name": "pickleshare",
@@ -4870,7 +4870,7 @@
           {
             "name": "soupsieve",
             "purl": "",
-            "version": "2.9.2"
+            "version": "2.10"
           },
           {
             "name": "sql_metadata",
@@ -4995,7 +4995,7 @@
           {
             "name": "wcwidth",
             "purl": "",
-            "version": "0.8.4"
+            "version": "0.9.1"
           },
           {
             "name": "weasyprint",
