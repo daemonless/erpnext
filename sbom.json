@@ -1,11 +1,11 @@
 {
-  "generated": "2026-09-28T15:41:31Z",
+  "generated": "2026-09-30T14:00:58Z",
   "image": "erpnext",
   "tags": {
     "latest": {
-      "app_version": "15.121.5",
+      "app_version": "15.121.6",
       "arch": "amd64",
-      "generated": "2026-09-28T15:36:43Z",
+      "generated": "2026-09-30T13:57:11Z",
       "packages": {
         "dotnet": [],
         "freebsd": [
@@ -42,14 +42,14 @@
               "BSD2CLAUSE"
             ],
             "name": "FreeBSD-clibs",
-            "version": "15.1p2"
+            "version": "15.1p4"
           },
           {
             "licenses": [
               "BSD2CLAUSE"
             ],
             "name": "FreeBSD-clibs-lib32",
-            "version": "15.1p2"
+            "version": "15.1p4"
           },
           {
             "licenses": [
@@ -70,7 +70,7 @@
               "BSD-3-Clause"
             ],
             "name": "FreeBSD-dhclient",
-            "version": "15.1"
+            "version": "15.1p4"
           },
           {
             "licenses": [
@@ -105,7 +105,7 @@
               "BSD2CLAUSE"
             ],
             "name": "FreeBSD-libcasper",
-            "version": "15.1"
+            "version": "15.1p4"
           },
           {
             "licenses": [
@@ -168,7 +168,7 @@
               "BSD2CLAUSE"
             ],
             "name": "FreeBSD-openssl-lib",
-            "version": "15.1p3"
+            "version": "15.1p4"
           },
           {
             "licenses": [
@@ -203,7 +203,7 @@
               "BSD2CLAUSE"
             ],
             "name": "FreeBSD-runtime",
-            "version": "15.1p3"
+            "version": "15.1p4"
           },
           {
             "licenses": [
@@ -224,7 +224,7 @@
               "BSD2CLAUSE"
             ],
             "name": "FreeBSD-utilities",
-            "version": "15.1p2"
+            "version": "15.1p4"
           },
           {
             "licenses": [
@@ -252,7 +252,7 @@
               "PD"
             ],
             "name": "FreeBSD-zoneinfo",
-            "version": "15.1p2"
+            "version": "15.1p4"
           },
           {
             "licenses": [
@@ -308,7 +308,7 @@
               "APACHE20"
             ],
             "name": "aws-c-common",
-            "version": "1.0.0,1"
+            "version": "1.0.1,1"
           },
           {
             "licenses": [
@@ -350,7 +350,7 @@
               "APACHE20"
             ],
             "name": "aws-c-s3",
-            "version": "1.1.2"
+            "version": "1.2.0"
           },
           {
             "licenses": [
@@ -378,7 +378,7 @@
               "APACHE20"
             ],
             "name": "aws-sdk-cpp",
-            "version": "1.11.891"
+            "version": "1.11.901"
           },
           {
             "licenses": [
@@ -545,7 +545,7 @@
               "LGPL21"
             ],
             "name": "fribidi",
-            "version": "1.0.16"
+            "version": "1.0.17"
           },
           {
             "licenses": [
@@ -596,7 +596,7 @@
               "GPLv2"
             ],
             "name": "git-tiny",
-            "version": "2.55.0"
+            "version": "2.56.0"
           },
           {
             "licenses": [
@@ -1152,7 +1152,7 @@
               "BSD2CLAUSE"
             ],
             "name": "nginx",
-            "version": "1.30.5,3"
+            "version": "1.30.5_1,3"
           },
           {
             "licenses": [
@@ -1662,7 +1662,7 @@
               "MIT"
             ],
             "name": "utf8proc",
-            "version": "2.11.3"
+            "version": "2.12.0"
           },
           {
             "licenses": [
@@ -2702,7 +2702,7 @@
           {
             "name": "frappe-datatable",
             "purl": "",
-            "version": "1.20.7"
+            "version": "1.21.2"
           },
           {
             "name": "frappe-gantt",
@@ -4230,7 +4230,7 @@
           {
             "name": "charset-normalizer",
             "purl": "",
-            "version": "3.5.1"
+            "version": "3.5.2"
           },
           {
             "name": "click",
@@ -4310,7 +4310,7 @@
           {
             "name": "erpnext",
             "purl": "",
-            "version": "15.121.5"
+            "version": "15.121.6"
           },
           {
             "name": "et_xmlfile",
@@ -4345,7 +4345,7 @@
           {
             "name": "frappe",
             "purl": "",
-            "version": "15.121.1"
+            "version": "15.121.2"
           },
           {
             "name": "frappe-bench",
@@ -4360,7 +4360,7 @@
           {
             "name": "google-api-core",
             "purl": "",
-            "version": "2.39.0"
+            "version": "2.40.0"
           },
           {
             "name": "google-api-python-client",
@@ -4375,7 +4375,7 @@
           {
             "name": "google-auth-httplib2",
             "purl": "",
-            "version": "0.4.2"
+            "version": "0.4.3"
           },
           {
             "name": "google-auth-oauthlib",
@@ -4385,7 +4385,7 @@
           {
             "name": "googleapis-common-protos",
             "purl": "",
-            "version": "1.75.4"
+            "version": "1.75.5"
           },
           {
             "name": "googlemaps",
@@ -4650,7 +4650,7 @@
           {
             "name": "proto-plus",
             "purl": "",
-            "version": "1.28.4"
+            "version": "1.29.0"
           },
           {
             "name": "protobuf",
