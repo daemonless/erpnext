@@ -11,19 +11,28 @@ x-daemonless:
   user: "bsd"
   mlock: false
   community: "Discord:https://discord.gg/Kb9tkhecZT"
-  # MariaDB and Redis sidecars for the AppJail director bundle; host networking
-  # so ERPNext reaches both on localhost, as it does under podman.
+  # erpnext is the one people open; mariadb and redis stay on the stack's
+  # private network, where erpnext finds them by the names fjord puts in
+  # DB_HOST and REDIS_HOSTNAME (127.0.0.1 on host networking).
+  networking:
+    erpnext: default
+    "*": private
+  hostnames:
+    mariadb: DB_HOST
+    redis: REDIS_HOSTNAME
+  # MariaDB and Redis sidecars for the AppJail director bundle, named as the
+  # services are so fjord finds each jail by the service's name.
   appjail:
     director:
       options:
         - alias:
         - ip4_inherit:
     depends_on:
-      - name: erpnext-mariadb
+      - name: mariadb
         image: ghcr.io/daemonless/mariadb:11.4
         volumes:
           mariadb_data: /config
-      - name: erpnext-redis
+      - name: redis
         image: ghcr.io/daemonless/redis:latest
         volumes:
           redis_data: /config
@@ -40,6 +49,14 @@ x-daemonless:
       ADMIN_PASSWORD:
         desc: "Password for the 'Administrator' account. Required on first run only, when the site is created."
         level: primary
+      DB_HOST:
+        desc: "Where ERPNext finds MariaDB (fjord sets this; 127.0.0.1 on host networking)"
+        level: advanced
+        optional: true
+      REDIS_HOSTNAME:
+        desc: "Where ERPNext finds Redis (fjord sets this; 127.0.0.1 on host networking)"
+        level: advanced
+        optional: true
       DB_ROOT_PASSWORD:
         desc: "MariaDB root password, used once to create the site's database and user. Must match the database's own root password. Required on first run only."
         level: primary
@@ -136,11 +153,11 @@ services:
       - TZ=UTC
       - SITE_NAME=erpnext.localhost
       - ADMIN_PASSWORD=changeme
-      - DB_HOST=127.0.0.1
+      - DB_HOST=${DB_HOST:-127.0.0.1}
       - DB_PORT=3306
       - DB_ROOT_PASSWORD=changeme
-      - REDIS_CACHE=redis://127.0.0.1:6379/0
-      - REDIS_QUEUE=redis://127.0.0.1:6379/1
+      - REDIS_CACHE=redis://${REDIS_HOSTNAME:-127.0.0.1}:6379/0
+      - REDIS_QUEUE=redis://${REDIS_HOSTNAME:-127.0.0.1}:6379/1
 
     volumes:
       - /path/to/containers/erpnext:/app/frappe-bench/sites
