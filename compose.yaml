@@ -30,6 +30,9 @@ x-daemonless:
     depends_on:
       - name: mariadb
         image: ghcr.io/daemonless/mariadb:11.4
+        env:
+          MYSQL_ROOT_PASSWORD: "!ENV '${DB_ROOT_PASSWORD}'"
+          TZ: "!ENV '${TZ}'"
         volumes:
           mariadb_data: /config
       - name: redis
@@ -42,7 +45,12 @@ x-daemonless:
     env:
       PUID: "User ID for the application process"
       PGID: "Group ID for the application process"
-      TZ: "Timezone for the container"
+      TZ:
+        desc: "Timezone for the containers"
+        optional: true
+      SITES_LOCATION: "Site data: database config, uploaded files, private files and per-site logs"
+      DB_DATA_LOCATION: "MariaDB data files"
+      REDIS_DATA_LOCATION: "Redis data"
       SITE_NAME:
         desc: "Frappe site to create and serve. Any hostname reaches it -- nginx sends this name to the backend -- so it need not resolve in DNS."
         level: primary
@@ -150,17 +158,18 @@ services:
     environment:
       - PUID=1000
       - PGID=1000
-      - TZ=UTC
-      - SITE_NAME=erpnext.localhost
-      - ADMIN_PASSWORD=changeme
+      - TZ=${TZ:-UTC}
+      - SITE_NAME=${SITE_NAME}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
       - DB_HOST=${DB_HOST:-127.0.0.1}
       - DB_PORT=3306
-      - DB_ROOT_PASSWORD=changeme
+      # The same variable as the database's root password: the two must match.
+      - DB_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
       - REDIS_CACHE=redis://${REDIS_HOSTNAME:-127.0.0.1}:6379/0
       - REDIS_QUEUE=redis://${REDIS_HOSTNAME:-127.0.0.1}:6379/1
 
     volumes:
-      - /path/to/containers/erpnext:/app/frappe-bench/sites
+      - ${SITES_LOCATION}:/app/frappe-bench/sites
 
     depends_on:
       - mariadb
@@ -172,10 +181,10 @@ services:
     restart: always
     network_mode: host
     environment:
-      - MYSQL_ROOT_PASSWORD=changeme
-      - TZ=UTC
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+      - TZ=${TZ:-UTC}
     volumes:
-      - /path/to/containers/erpnext-mariadb:/config
+      - ${DB_DATA_LOCATION}:/config
 
   redis:
     image: ghcr.io/daemonless/redis:latest
@@ -183,6 +192,6 @@ services:
     restart: always
     network_mode: host
     environment:
-      - TZ=UTC
+      - TZ=${TZ:-UTC}
     volumes:
-      - /path/to/containers/erpnext-redis:/config
+      - ${REDIS_DATA_LOCATION}:/config
