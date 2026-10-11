@@ -1,11 +1,11 @@
 {
-  "generated": "2026-10-07T16:16:32Z",
+  "generated": "2026-10-11T21:09:44Z",
   "image": "erpnext",
   "tags": {
     "latest": {
       "app_version": "15.122.0",
       "arch": "amd64",
-      "generated": "2026-10-07T16:12:49Z",
+      "generated": "2026-10-11T21:06:03Z",
       "packages": {
         "dotnet": [],
         "freebsd": [
@@ -294,7 +294,7 @@
               "APACHE20"
             ],
             "name": "aws-c-auth",
-            "version": "1.0.0"
+            "version": "1.0.1"
           },
           {
             "licenses": [
@@ -308,7 +308,7 @@
               "APACHE20"
             ],
             "name": "aws-c-common",
-            "version": "1.0.2,1"
+            "version": "1.0.3,1"
           },
           {
             "licenses": [
@@ -336,7 +336,7 @@
               "APACHE20"
             ],
             "name": "aws-c-io",
-            "version": "1.0.0"
+            "version": "1.1.0"
           },
           {
             "licenses": [
@@ -350,7 +350,7 @@
               "APACHE20"
             ],
             "name": "aws-c-s3",
-            "version": "1.3.0"
+            "version": "1.3.1"
           },
           {
             "licenses": [
@@ -371,7 +371,7 @@
               "APACHE20"
             ],
             "name": "aws-crt-cpp",
-            "version": "0.43.8"
+            "version": "0.43.9"
           },
           {
             "licenses": [
@@ -428,7 +428,7 @@
               "MPL20"
             ],
             "name": "ca_root_nss",
-            "version": "3.130"
+            "version": "3.131"
           },
           {
             "licenses": [
@@ -499,7 +499,7 @@
               "MIT"
             ],
             "name": "expat",
-            "version": "2.8.4"
+            "version": "2.8.5"
           },
           {
             "licenses": [
@@ -1152,7 +1152,7 @@
               "BSD2CLAUSE"
             ],
             "name": "nginx",
-            "version": "1.30.5_1,3"
+            "version": "1.30.5_3,3"
           },
           {
             "licenses": [
@@ -1454,7 +1454,7 @@
               "MIT"
             ],
             "name": "py312-pytz",
-            "version": "2026.3,1"
+            "version": "2026.5,1"
           },
           {
             "licenses": [
@@ -1503,7 +1503,7 @@
               "APACHE20"
             ],
             "name": "py312-tzdata",
-            "version": "2026.4"
+            "version": "2026.5"
           },
           {
             "licenses": [
@@ -1697,7 +1697,7 @@
               "MIT"
             ],
             "name": "xorgproto",
-            "version": "2025.1"
+            "version": "2026.1"
           },
           {
             "licenses": [
@@ -4250,7 +4250,7 @@
           {
             "name": "cssselect",
             "purl": "",
-            "version": "1.5.0"
+            "version": "1.6.0"
           },
           {
             "name": "cssselect2",
@@ -4325,7 +4325,7 @@
           {
             "name": "executing",
             "purl": "",
-            "version": "2.2.1"
+            "version": "2.3.0"
           },
           {
             "name": "filelock",
@@ -4360,7 +4360,7 @@
           {
             "name": "google-api-core",
             "purl": "",
-            "version": "2.41.0"
+            "version": "2.42.0"
           },
           {
             "name": "google-api-python-client",
@@ -4600,7 +4600,7 @@
           {
             "name": "phonenumbers",
             "purl": "",
-            "version": "9.0.40"
+            "version": "9.0.41"
           },
           {
             "name": "pickleshare",
@@ -4870,7 +4870,7 @@
           {
             "name": "soupsieve",
             "purl": "",
-            "version": "2.10"
+            "version": "3.0.1"
           },
           {
             "name": "sql_metadata",
@@ -4880,7 +4880,7 @@
           {
             "name": "sqlglot",
             "purl": "",
-            "version": "30.21.0"
+            "version": "30.22.0"
           },
           {
             "name": "sqlite3",
@@ -4970,7 +4970,7 @@
           {
             "name": "tzdata",
             "purl": "",
-            "version": "2026.4"
+            "version": "2026.5"
           },
           {
             "name": "unicodedata2",

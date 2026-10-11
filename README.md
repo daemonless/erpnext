@@ -119,12 +119,16 @@ in the stack below.
         PGID=1000
         TZ=UTC
         SITE_NAME=erpnext.localhost
-        ADMIN_PASSWORD=changeme
+        ADMIN_PASSWORD=<ADMIN_PASSWORD>
         DB_HOST=127.0.0.1
         DB_PORT=3306
-        DB_ROOT_PASSWORD=changeme
-        REDIS_CACHE=redis://127.0.0.1:6379/0
-        REDIS_QUEUE=redis://127.0.0.1:6379/1
+        DB_ROOT_PASSWORD=<DB_ROOT_PASSWORD>
+        REDIS_CACHE=redis://${REDIS_HOSTNAME:-127.0.0.1}:6379/0
+        REDIS_QUEUE=redis://${REDIS_HOSTNAME:-127.0.0.1}:6379/1
+        SITES_LOCATION=/containers/erpnext/sites
+        DB_DATA_LOCATION=/containers/erpnext/mariadb
+        REDIS_DATA_LOCATION=/containers/erpnext/redis
+        REDIS_HOSTNAME=
         DB_ROOT_USER=
         SOCKETIO_PORT=
         GUNICORN_WORKERS=
@@ -160,6 +164,10 @@ in the stack below.
                 - DB_ROOT_PASSWORD: !ENV '${DB_ROOT_PASSWORD}'
                 - REDIS_CACHE: !ENV '${REDIS_CACHE}'
                 - REDIS_QUEUE: !ENV '${REDIS_QUEUE}'
+                - SITES_LOCATION: !ENV '${SITES_LOCATION}'
+                - DB_DATA_LOCATION: !ENV '${DB_DATA_LOCATION}'
+                - REDIS_DATA_LOCATION: !ENV '${REDIS_DATA_LOCATION}'
+                - REDIS_HOSTNAME: !ENV '${REDIS_HOSTNAME}'
                 - DB_ROOT_USER: !ENV '${DB_ROOT_USER}'
                 - SOCKETIO_PORT: !ENV '${SOCKETIO_PORT}'
                 - GUNICORN_WORKERS: !ENV '${GUNICORN_WORKERS}'
@@ -168,15 +176,19 @@ in the stack below.
                 - DEP_WAIT_TIMEOUT: !ENV '${DEP_WAIT_TIMEOUT}'
             volumes:
               - erpnext_sites: /app/frappe-bench/sites
-          erpnext-mariadb:
-            name: erpnext_mariadb
+          mariadb:
+            name: mariadb
             options:
               - from: ghcr.io/daemonless/mariadb:11.4
               - template: !ENV '${PWD}/template.conf'
+            oci:
+              environment:
+                - MYSQL_ROOT_PASSWORD: !ENV '${DB_ROOT_PASSWORD}'
+                - TZ: !ENV '${TZ}'
             volumes:
               - mariadb_data: /config
-          erpnext-redis:
-            name: erpnext_redis
+          redis:
+            name: redis
             options:
               - from: ghcr.io/daemonless/redis:latest
               - template: !ENV '${PWD}/template.conf'
