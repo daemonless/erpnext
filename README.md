@@ -128,13 +128,6 @@ in the stack below.
         SITES_LOCATION=/containers/erpnext/sites
         DB_DATA_LOCATION=/containers/erpnext/mariadb
         REDIS_DATA_LOCATION=/containers/erpnext/redis
-        REDIS_HOSTNAME=
-        DB_ROOT_USER=
-        SOCKETIO_PORT=
-        GUNICORN_WORKERS=
-        GUNICORN_THREADS=
-        GUNICORN_TIMEOUT=
-        DEP_WAIT_TIMEOUT=
         ```
 
         **appjail-director.yml**:
@@ -150,7 +143,6 @@ in the stack below.
             name: erpnext
             options:
               - container: 'args:--pull'
-              - expose: ':8080 proto:tcp'
             oci:
               user: root
               environment:
@@ -167,13 +159,6 @@ in the stack below.
                 - SITES_LOCATION: !ENV '${SITES_LOCATION}'
                 - DB_DATA_LOCATION: !ENV '${DB_DATA_LOCATION}'
                 - REDIS_DATA_LOCATION: !ENV '${REDIS_DATA_LOCATION}'
-                - REDIS_HOSTNAME: !ENV '${REDIS_HOSTNAME}'
-                - DB_ROOT_USER: !ENV '${DB_ROOT_USER}'
-                - SOCKETIO_PORT: !ENV '${SOCKETIO_PORT}'
-                - GUNICORN_WORKERS: !ENV '${GUNICORN_WORKERS}'
-                - GUNICORN_THREADS: !ENV '${GUNICORN_THREADS}'
-                - GUNICORN_TIMEOUT: !ENV '${GUNICORN_TIMEOUT}'
-                - DEP_WAIT_TIMEOUT: !ENV '${DEP_WAIT_TIMEOUT}'
             volumes:
               - erpnext_sites: /app/frappe-bench/sites
           mariadb:
