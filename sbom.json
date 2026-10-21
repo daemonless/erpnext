@@ -1,11 +1,11 @@
 {
-  "generated": "2026-10-15T07:28:25Z",
+  "generated": "2026-10-21T14:01:15Z",
   "image": "erpnext",
   "tags": {
     "latest": {
-      "app_version": "15.123.0",
+      "app_version": "15.124.0",
       "arch": "amd64",
-      "generated": "2026-10-15T07:24:42Z",
+      "generated": "2026-10-21T13:57:55Z",
       "packages": {
         "dotnet": [],
         "freebsd": [
@@ -203,7 +203,7 @@
               "BSD2CLAUSE"
             ],
             "name": "FreeBSD-runtime",
-            "version": "15.1p5"
+            "version": "15.1p6"
           },
           {
             "licenses": [
@@ -329,7 +329,7 @@
               "APACHE20"
             ],
             "name": "aws-c-http",
-            "version": "1.1.0"
+            "version": "1.1.1"
           },
           {
             "licenses": [
@@ -343,7 +343,7 @@
               "APACHE20"
             ],
             "name": "aws-c-mqtt",
-            "version": "1.1.1"
+            "version": "1.1.2"
           },
           {
             "licenses": [
@@ -371,14 +371,14 @@
               "APACHE20"
             ],
             "name": "aws-crt-cpp",
-            "version": "0.43.9"
+            "version": "0.44.0"
           },
           {
             "licenses": [
               "APACHE20"
             ],
             "name": "aws-sdk-cpp",
-            "version": "1.11.901"
+            "version": "1.11.912"
           },
           {
             "licenses": [
@@ -647,7 +647,7 @@
               "MIT"
             ],
             "name": "harfbuzz",
-            "version": "14.2.1"
+            "version": "14.5.1"
           },
           {
             "licenses": [
@@ -919,7 +919,7 @@
               "GPLv3+"
             ],
             "name": "libimagequant",
-            "version": "4.4.1_7"
+            "version": "4.4.1_8"
           },
           {
             "licenses": [
@@ -1152,14 +1152,14 @@
               "BSD2CLAUSE"
             ],
             "name": "nginx",
-            "version": "1.30.5_4,3"
+            "version": "1.30.6_1,3"
           },
           {
             "licenses": [
               "MIT"
             ],
             "name": "node22",
-            "version": "22.23.2_1"
+            "version": "22.23.2_2"
           },
           {
             "licenses": [
@@ -1309,7 +1309,7 @@
               "BSD3CLAUSE"
             ],
             "name": "py312-cryptography",
-            "version": "50.0.1,1"
+            "version": "50.0.1_1,1"
           },
           {
             "licenses": [
@@ -1475,7 +1475,7 @@
               "PSFL"
             ],
             "name": "py312-sqlite3",
-            "version": "3.12.14_10"
+            "version": "3.12.15_10"
           },
           {
             "licenses": [
@@ -1496,7 +1496,7 @@
               "PSFL"
             ],
             "name": "py312-tkinter",
-            "version": "3.12.14_11"
+            "version": "3.12.15_11"
           },
           {
             "licenses": [
@@ -1549,7 +1549,7 @@
               "PSFL"
             ],
             "name": "python312",
-            "version": "3.12.14_1"
+            "version": "3.12.15"
           },
           {
             "licenses": [
@@ -1570,7 +1570,7 @@
               "APACHE20"
             ],
             "name": "s2n-tls",
-            "version": "1.7.11,1"
+            "version": "1.7.12,1"
           },
           {
             "licenses": [
@@ -1592,7 +1592,7 @@
               "APACHE20"
             ],
             "name": "simdjson",
-            "version": "5.0.1"
+            "version": "5.0.5"
           },
           {
             "licenses": [
@@ -4200,7 +4200,7 @@
           {
             "name": "cachetools",
             "purl": "",
-            "version": "7.2.1"
+            "version": "7.2.4"
           },
           {
             "name": "cairocffi",
@@ -4215,7 +4215,7 @@
           {
             "name": "certifi",
             "purl": "",
-            "version": "2026.6.17"
+            "version": "2026.10.19"
           },
           {
             "name": "cffi",
@@ -4310,7 +4310,7 @@
           {
             "name": "erpnext",
             "purl": "",
-            "version": "15.123.0"
+            "version": "15.124.0"
           },
           {
             "name": "et_xmlfile",
@@ -4405,7 +4405,7 @@
           {
             "name": "holidays",
             "purl": "",
-            "version": "0.106"
+            "version": "0.107"
           },
           {
             "name": "honcho",
@@ -4570,7 +4570,7 @@
           {
             "name": "packaging",
             "purl": "",
-            "version": "26.0"
+            "version": "26.2"
           },
           {
             "name": "pandas",
@@ -4615,7 +4615,7 @@
           {
             "name": "pip",
             "purl": "",
-            "version": "26.2.1"
+            "version": "26.2.2"
           },
           {
             "name": "plaid-python",
@@ -4880,12 +4880,12 @@
           {
             "name": "sqlglot",
             "purl": "",
-            "version": "30.23.0"
+            "version": "30.24.0"
           },
           {
             "name": "sqlite3",
             "purl": "",
-            "version": "3.12.14"
+            "version": "3.12.15"
           },
           {
             "name": "sqlparse",
@@ -4925,7 +4925,7 @@
           {
             "name": "tkinter",
             "purl": "",
-            "version": "3.12.14"
+            "version": "3.12.15"
           },
           {
             "name": "tomli",
@@ -4995,7 +4995,7 @@
           {
             "name": "wcwidth",
             "purl": "",
-            "version": "0.9.2"
+            "version": "0.9.3"
           },
           {
             "name": "weasyprint",
