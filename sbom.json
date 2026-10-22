@@ -1,11 +1,11 @@
 {
-  "generated": "2026-10-21T14:01:15Z",
+  "generated": "2026-10-22T18:39:29Z",
   "image": "erpnext",
   "tags": {
     "latest": {
-      "app_version": "15.124.0",
+      "app_version": "15.124.1",
       "arch": "amd64",
-      "generated": "2026-10-21T13:57:55Z",
+      "generated": "2026-10-22T18:36:20Z",
       "packages": {
         "dotnet": [],
         "freebsd": [
@@ -647,7 +647,7 @@
               "MIT"
             ],
             "name": "harfbuzz",
-            "version": "14.5.1"
+            "version": "14.6.0"
           },
           {
             "licenses": [
@@ -741,7 +741,7 @@
               "MIT"
             ],
             "name": "libX11",
-            "version": "1.8.13_1,1"
+            "version": "1.8.14,1"
           },
           {
             "licenses": [
@@ -790,21 +790,21 @@
               "MIT"
             ],
             "name": "libXi",
-            "version": "1.8.3,1"
+            "version": "1.8.4,1"
           },
           {
             "licenses": [
               "MIT"
             ],
             "name": "libXrender",
-            "version": "0.9.12"
+            "version": "0.9.13"
           },
           {
             "licenses": [
               "MIT"
             ],
             "name": "libXtst",
-            "version": "1.2.5"
+            "version": "1.2.6"
           },
           {
             "licenses": [
@@ -1152,7 +1152,7 @@
               "BSD2CLAUSE"
             ],
             "name": "nginx",
-            "version": "1.30.6_1,3"
+            "version": "1.30.6_3,3"
           },
           {
             "licenses": [
@@ -2702,7 +2702,7 @@
           {
             "name": "frappe-datatable",
             "purl": "",
-            "version": "1.21.2"
+            "version": "1.21.3"
           },
           {
             "name": "frappe-gantt",
@@ -4058,11 +4058,6 @@
         "php": [],
         "python": [
           {
-            "name": "Babel",
-            "purl": "",
-            "version": "2.13.1"
-          },
-          {
             "name": "CacheControl",
             "purl": "",
             "version": "0.14.4"
@@ -4080,7 +4075,7 @@
           {
             "name": "PyJWT",
             "purl": "",
-            "version": "2.13.0"
+            "version": "2.15.1"
           },
           {
             "name": "PyMySQL",
@@ -4141,6 +4136,11 @@
             "name": "autocommand",
             "purl": "",
             "version": "2.2.2"
+          },
+          {
+            "name": "babel",
+            "purl": "",
+            "version": "2.18.0"
           },
           {
             "name": "backcall",
@@ -4310,7 +4310,7 @@
           {
             "name": "erpnext",
             "purl": "",
-            "version": "15.124.0"
+            "version": "15.124.1"
           },
           {
             "name": "et_xmlfile",
@@ -4345,7 +4345,7 @@
           {
             "name": "frappe",
             "purl": "",
-            "version": "15.123.1"
+            "version": "15.124.0"
           },
           {
             "name": "frappe-bench",
@@ -4550,7 +4550,7 @@
           {
             "name": "oauthlib",
             "purl": "",
-            "version": "3.3.1"
+            "version": "4.0.0"
           },
           {
             "name": "olefile",
@@ -4750,7 +4750,7 @@
           {
             "name": "pypdf",
             "purl": "",
-            "version": "6.15.0"
+            "version": "6.19.0"
           },
           {
             "name": "pyphen",
@@ -4870,7 +4870,7 @@
           {
             "name": "soupsieve",
             "purl": "",
-            "version": "3.0.3"
+            "version": "3.0.4"
           },
           {
             "name": "sql_metadata",
