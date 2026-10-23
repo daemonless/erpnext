@@ -1,11 +1,11 @@
 {
-  "generated": "2026-10-22T18:39:29Z",
+  "generated": "2026-10-23T17:21:56Z",
   "image": "erpnext",
   "tags": {
     "latest": {
       "app_version": "15.124.1",
       "arch": "amd64",
-      "generated": "2026-10-22T18:36:20Z",
+      "generated": "2026-10-23T17:18:02Z",
       "packages": {
         "dotnet": [],
         "freebsd": [
@@ -182,13 +182,6 @@
               "BSD2CLAUSE"
             ],
             "name": "FreeBSD-pkg-bootstrap",
-            "version": "15.1"
-          },
-          {
-            "licenses": [
-              "BSD2CLAUSE"
-            ],
-            "name": "FreeBSD-rc",
             "version": "15.1"
           },
           {
@@ -486,13 +479,6 @@
             ],
             "name": "duktape-lib",
             "version": "2.7.0_1"
-          },
-          {
-            "licenses": [
-              "ISCL"
-            ],
-            "name": "execline",
-            "version": "2.9.8.1"
           },
           {
             "licenses": [
@@ -1574,13 +1560,6 @@
           },
           {
             "licenses": [
-              "ISCL"
-            ],
-            "name": "s6",
-            "version": "2.14.0.1"
-          },
-          {
-            "licenses": [
               "GPLv2"
             ],
             "name": "shared-mime-info",
@@ -1593,13 +1572,6 @@
             ],
             "name": "simdjson",
             "version": "5.0.5"
-          },
-          {
-            "licenses": [
-              "ISCL"
-            ],
-            "name": "skalibs",
-            "version": "2.14.5.1"
           },
           {
             "licenses": [
@@ -4350,7 +4322,7 @@
           {
             "name": "frappe-bench",
             "purl": "",
-            "version": "5.31.0"
+            "version": "5.31.1"
           },
           {
             "name": "gitdb",
@@ -4360,7 +4332,7 @@
           {
             "name": "google-api-core",
             "purl": "",
-            "version": "2.42.0"
+            "version": "2.43.0"
           },
           {
             "name": "google-api-python-client",
@@ -4385,7 +4357,7 @@
           {
             "name": "googleapis-common-protos",
             "purl": "",
-            "version": "1.75.5"
+            "version": "1.76.0"
           },
           {
             "name": "googlemaps",
@@ -5044,7 +5016,7 @@
       "source": "upstream",
       "summary": {
         "dotnet": 0,
-        "freebsd": 239,
+        "freebsd": 235,
         "go": 3,
         "java": 0,
         "node": 464,
@@ -5052,7 +5024,7 @@
         "python": 196,
         "ruby": 0,
         "rust": 0,
-        "total": 902
+        "total": 898
       }
     }
   }
