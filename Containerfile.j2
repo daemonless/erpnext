@@ -5,7 +5,7 @@ ARG ERPNEXT_BRANCH=version-15
 ARG BENCH_DIR=/app/frappe-bench
 
 # --- builder ---------------------------------------------------------------
-FROM ghcr.io/daemonless/base:${BASE_VERSION} AS builder
+FROM ghcr.io/daemonless/base-exec:${BASE_VERSION} AS builder
 
 ARG FRAPPE_BRANCH
 ARG ERPNEXT_BRANCH
@@ -93,7 +93,7 @@ RUN find ${BENCH_DIR}/apps -mindepth 1 -path "*/.git" -prune -exec rm -rf {} + &
     rm -rf /root/.cache /root/.cargo /root/.npm /root/.yarn /config/.cache
 
 # --- runtime ---------------------------------------------------------------
-FROM ghcr.io/daemonless/base:${BASE_VERSION}
+FROM ghcr.io/daemonless/base-rcd:${BASE_VERSION}
 
 ARG FREEBSD_ARCH=amd64
 ARG BENCH_DIR
@@ -143,8 +143,9 @@ RUN mv ${BENCH_DIR}/sites/assets ${BENCH_DIR}/assets && \
     chmod a+r /app/version
 
 COPY root/ /
+RUN chmod +x /daemonless/libexec/* /daemonless/init.d/*
 
-RUN chmod +x /etc/services.d/*/run /etc/cont-init.d/* /healthz 2>/dev/null || true
+RUN chmod +x /healthz
 
 EXPOSE {{ ports[0].port }}
 

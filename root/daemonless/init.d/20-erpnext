@@ -55,12 +55,12 @@ wait_for_redis "${REDIS_CACHE:-redis://redis:6379/0}" "redis cache"
 wait_for_redis "${REDIS_QUEUE:-redis://redis:6379/1}" "redis queue"
 
 # common_site_config.json holds the shared db/redis wiring for every site.
-s6-setuidgid bsd bench set-config -g db_host "${DB_HOST:-mariadb}"
-s6-setuidgid bsd bench set-config -gp db_port "${DB_PORT:-3306}"
-s6-setuidgid bsd bench set-config -g redis_cache "${REDIS_CACHE:-redis://redis:6379/0}"
-s6-setuidgid bsd bench set-config -g redis_queue "${REDIS_QUEUE:-redis://redis:6379/1}"
-s6-setuidgid bsd bench set-config -g redis_socketio "${REDIS_QUEUE:-redis://redis:6379/1}"
-s6-setuidgid bsd bench set-config -gp socketio_port "${SOCKETIO_PORT:-9000}"
+dsu bsd bench set-config -g db_host "${DB_HOST:-mariadb}"
+dsu bsd bench set-config -gp db_port "${DB_PORT:-3306}"
+dsu bsd bench set-config -g redis_cache "${REDIS_CACHE:-redis://redis:6379/0}"
+dsu bsd bench set-config -g redis_queue "${REDIS_QUEUE:-redis://redis:6379/1}"
+dsu bsd bench set-config -g redis_socketio "${REDIS_QUEUE:-redis://redis:6379/1}"
+dsu bsd bench set-config -gp socketio_port "${SOCKETIO_PORT:-9000}"
 
 if [ ! -d "${BENCH_DIR}/sites/${SITE_NAME}" ]; then
     if [ -z "${DB_ROOT_PASSWORD}" ] || [ -z "${ADMIN_PASSWORD}" ]; then
@@ -68,7 +68,7 @@ if [ ! -d "${BENCH_DIR}/sites/${SITE_NAME}" ]; then
         exit 1
     fi
     echo "[erpnext] creating site ${SITE_NAME}"
-    s6-setuidgid bsd bench new-site "${SITE_NAME}" \
+    dsu bsd bench new-site "${SITE_NAME}" \
         --db-root-username "${DB_ROOT_USER:-root}" \
         --db-root-password "${DB_ROOT_PASSWORD}" \
         --admin-password "${ADMIN_PASSWORD}" \
@@ -76,5 +76,5 @@ if [ ! -d "${BENCH_DIR}/sites/${SITE_NAME}" ]; then
         --set-default
 else
     echo "[erpnext] site ${SITE_NAME} exists; running migrations"
-    s6-setuidgid bsd bench --site "${SITE_NAME}" migrate
+    dsu bsd bench --site "${SITE_NAME}" migrate
 fi
