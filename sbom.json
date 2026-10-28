@@ -1,11 +1,11 @@
 {
-  "generated": "2026-10-24T09:09:50Z",
+  "generated": "2026-10-28T23:51:26Z",
   "image": "erpnext",
   "tags": {
     "latest": {
-      "app_version": "15.124.1",
+      "app_version": "15.124.2",
       "arch": "amd64",
-      "generated": "2026-10-24T09:06:46Z",
+      "generated": "2026-10-28T23:46:41Z",
       "packages": {
         "dotnet": [],
         "freebsd": [
@@ -350,7 +350,7 @@
               "APACHE20"
             ],
             "name": "aws-c-sdkutils",
-            "version": "1.0.0"
+            "version": "1.0.1"
           },
           {
             "licenses": [
@@ -364,7 +364,7 @@
               "APACHE20"
             ],
             "name": "aws-crt-cpp",
-            "version": "0.44.0"
+            "version": "0.44.2"
           },
           {
             "licenses": [
@@ -385,7 +385,7 @@
               "APACHE20"
             ],
             "name": "benchmark",
-            "version": "1.9.5,1"
+            "version": "1.10.0,1"
           },
           {
             "licenses": [
@@ -407,7 +407,7 @@
               "MIT"
             ],
             "name": "brotli",
-            "version": "1.2.0,1"
+            "version": "1.2.1,1"
           },
           {
             "licenses": [
@@ -421,7 +421,7 @@
               "MPL20"
             ],
             "name": "ca_root_nss",
-            "version": "3.131.1"
+            "version": "3.132"
           },
           {
             "licenses": [
@@ -429,7 +429,7 @@
               "MPL11"
             ],
             "name": "cairo",
-            "version": "1.18.2,3"
+            "version": "1.18.6,3"
           },
           {
             "licenses": [
@@ -1021,7 +1021,7 @@
               "MIT"
             ],
             "name": "libuv",
-            "version": "1.52.1"
+            "version": "1.52.1_1"
           },
           {
             "licenses": [
@@ -1138,14 +1138,14 @@
               "BSD2CLAUSE"
             ],
             "name": "nginx",
-            "version": "1.30.6_4,3"
+            "version": "1.30.6_6,3"
           },
           {
             "licenses": [
               "MIT"
             ],
             "name": "node22",
-            "version": "22.23.2_2"
+            "version": "22.23.4"
           },
           {
             "licenses": [
@@ -1266,7 +1266,7 @@
               "MIT"
             ],
             "name": "py312-brotli",
-            "version": "1.2.0"
+            "version": "1.2.1"
           },
           {
             "licenses": [
@@ -4087,7 +4087,7 @@
           {
             "name": "Werkzeug",
             "purl": "",
-            "version": "3.1.6"
+            "version": "3.1.9"
           },
           {
             "name": "Whoosh",
@@ -4167,12 +4167,12 @@
           {
             "name": "brotli",
             "purl": "",
-            "version": "1.2.0"
+            "version": "1.2.1"
           },
           {
             "name": "cachetools",
             "purl": "",
-            "version": "7.2.4"
+            "version": "7.2.7"
           },
           {
             "name": "cairocffi",
@@ -4282,7 +4282,7 @@
           {
             "name": "erpnext",
             "purl": "",
-            "version": "15.124.1"
+            "version": "15.124.2"
           },
           {
             "name": "et_xmlfile",
@@ -4317,7 +4317,7 @@
           {
             "name": "frappe",
             "purl": "",
-            "version": "15.124.0"
+            "version": "15.125.0"
           },
           {
             "name": "frappe-bench",
@@ -4332,7 +4332,7 @@
           {
             "name": "google-api-core",
             "purl": "",
-            "version": "2.43.0"
+            "version": "2.43.1"
           },
           {
             "name": "google-api-python-client",
@@ -4392,7 +4392,7 @@
           {
             "name": "httplib2",
             "purl": "",
-            "version": "0.32.0"
+            "version": "0.32.1"
           },
           {
             "name": "idna",
@@ -4572,7 +4572,7 @@
           {
             "name": "phonenumbers",
             "purl": "",
-            "version": "9.0.41"
+            "version": "9.0.42"
           },
           {
             "name": "pickleshare",
@@ -4667,7 +4667,7 @@
           {
             "name": "pyasn1",
             "purl": "",
-            "version": "0.6.4"
+            "version": "0.6.5"
           },
           {
             "name": "pyasn1_modules",
@@ -4852,7 +4852,7 @@
           {
             "name": "sqlglot",
             "purl": "",
-            "version": "30.24.0"
+            "version": "30.25.0"
           },
           {
             "name": "sqlite3",
@@ -4967,7 +4967,7 @@
           {
             "name": "wcwidth",
             "purl": "",
-            "version": "0.9.3"
+            "version": "0.9.4"
           },
           {
             "name": "weasyprint",
