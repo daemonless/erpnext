@@ -1,11 +1,11 @@
 {
-  "generated": "2026-11-03T21:25:16Z",
+  "generated": "2026-11-04T08:54:46Z",
   "image": "erpnext",
   "tags": {
     "latest": {
-      "app_version": "15.124.4",
+      "app_version": "15.124.5",
       "arch": "amd64",
-      "generated": "2026-11-03T21:21:44Z",
+      "generated": "2026-11-04T08:50:39Z",
       "packages": {
         "dotnet": [],
         "freebsd": [
@@ -301,7 +301,7 @@
               "APACHE20"
             ],
             "name": "aws-c-common",
-            "version": "1.0.3,1"
+            "version": "1.0.5,1"
           },
           {
             "licenses": [
@@ -343,7 +343,7 @@
               "APACHE20"
             ],
             "name": "aws-c-s3",
-            "version": "1.4.1"
+            "version": "1.5.1"
           },
           {
             "licenses": [
@@ -364,7 +364,7 @@
               "APACHE20"
             ],
             "name": "aws-crt-cpp",
-            "version": "0.44.2"
+            "version": "0.44.3"
           },
           {
             "licenses": [
@@ -1138,7 +1138,7 @@
               "BSD2CLAUSE"
             ],
             "name": "nginx",
-            "version": "1.30.6_7,3"
+            "version": "1.30.6_10,3"
           },
           {
             "licenses": [
@@ -1556,7 +1556,7 @@
               "APACHE20"
             ],
             "name": "s2n-tls",
-            "version": "1.7.12,1"
+            "version": "1.7.13,1"
           },
           {
             "licenses": [
@@ -1571,7 +1571,7 @@
               "APACHE20"
             ],
             "name": "simdjson",
-            "version": "5.0.5"
+            "version": "5.1.0"
           },
           {
             "licenses": [
@@ -4277,7 +4277,7 @@
           {
             "name": "erpnext",
             "purl": "",
-            "version": "15.124.4"
+            "version": "15.124.5"
           },
           {
             "name": "et_xmlfile",
@@ -4297,7 +4297,7 @@
           {
             "name": "filelock",
             "purl": "",
-            "version": "4.2.7"
+            "version": "4.2.8"
           },
           {
             "name": "filetype",
