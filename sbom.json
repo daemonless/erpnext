@@ -1,11 +1,11 @@
 {
-  "generated": "2026-11-04T12:47:44Z",
+  "generated": "2026-11-12T22:20:16Z",
   "image": "erpnext",
   "tags": {
     "latest": {
-      "app_version": "15.124.5",
+      "app_version": "15.125.0",
       "arch": "amd64",
-      "generated": "2026-11-04T12:43:44Z",
+      "generated": "2026-11-12T22:15:55Z",
       "packages": {
         "dotnet": [],
         "freebsd": [
@@ -266,7 +266,7 @@
               "BSD2CLAUSE"
             ],
             "name": "aom",
-            "version": "3.15.2"
+            "version": "3.15.3"
           },
           {
             "licenses": [
@@ -389,11 +389,11 @@
           },
           {
             "licenses": [
-              "LGPL3",
-              "GPLv3"
+              "GPLv3",
+              "LGPL3"
             ],
             "name": "binutils",
-            "version": "2.44,1"
+            "version": "2.44_1,1"
           },
           {
             "licenses": [
@@ -485,7 +485,7 @@
               "MIT"
             ],
             "name": "expat",
-            "version": "2.9.0"
+            "version": "2.10.0"
           },
           {
             "licenses": [
@@ -557,8 +557,8 @@
           },
           {
             "licenses": [
-              "GPLv3+",
-              "LGPL21+"
+              "LGPL21+",
+              "GPLv3+"
             ],
             "name": "gettext-runtime",
             "version": "1.0_1"
@@ -641,7 +641,7 @@
               "GPLv2+"
             ],
             "name": "hwdata",
-            "version": "0.412,1"
+            "version": "0.413,1"
           },
           {
             "licenses": [
@@ -1082,7 +1082,7 @@
               "REGEX"
             ],
             "name": "llvm19",
-            "version": "19.1.7_4"
+            "version": "19.1.7_5"
           },
           {
             "licenses": [
@@ -1138,7 +1138,7 @@
               "BSD2CLAUSE"
             ],
             "name": "nginx",
-            "version": "1.30.6_10,3"
+            "version": "1.30.6_13,3"
           },
           {
             "licenses": [
@@ -1217,7 +1217,7 @@
               "BSD2CLAUSE"
             ],
             "name": "pkg",
-            "version": "2.8.4"
+            "version": "2.9.0"
           },
           {
             "licenses": [
@@ -1316,7 +1316,7 @@
               "MIT"
             ],
             "name": "py312-duckdb",
-            "version": "1.5.6"
+            "version": "2.0.0"
           },
           {
             "licenses": [
@@ -1571,7 +1571,7 @@
               "APACHE20"
             ],
             "name": "simdjson",
-            "version": "5.1.0"
+            "version": "5.1.1"
           },
           {
             "licenses": [
@@ -2669,7 +2669,7 @@
           {
             "name": "frappe-datatable",
             "purl": "",
-            "version": "1.21.3"
+            "version": "1.22.0"
           },
           {
             "name": "frappe-gantt",
@@ -3769,7 +3769,7 @@
           {
             "name": "socket.io-parser",
             "purl": "",
-            "version": "4.2.4"
+            "version": "4.2.7"
           },
           {
             "name": "sortablejs",
@@ -4167,7 +4167,7 @@
           {
             "name": "cachetools",
             "purl": "",
-            "version": "7.2.8"
+            "version": "8.0.0"
           },
           {
             "name": "cairocffi",
@@ -4267,7 +4267,7 @@
           {
             "name": "duckdb",
             "purl": "",
-            "version": "1.5.6+g00000000"
+            "version": "2.0.0"
           },
           {
             "name": "email-reply-parser",
@@ -4277,7 +4277,7 @@
           {
             "name": "erpnext",
             "purl": "",
-            "version": "15.124.5"
+            "version": "15.125.0"
           },
           {
             "name": "et_xmlfile",
@@ -4297,7 +4297,7 @@
           {
             "name": "filelock",
             "purl": "",
-            "version": "4.2.8"
+            "version": "4.2.10"
           },
           {
             "name": "filetype",
@@ -4312,7 +4312,7 @@
           {
             "name": "frappe",
             "purl": "",
-            "version": "15.126.0"
+            "version": "15.126.1"
           },
           {
             "name": "frappe-bench",
@@ -4327,7 +4327,7 @@
           {
             "name": "google-api-core",
             "purl": "",
-            "version": "2.43.2"
+            "version": "2.44.0"
           },
           {
             "name": "google-api-python-client",
@@ -4567,7 +4567,7 @@
           {
             "name": "phonenumbers",
             "purl": "",
-            "version": "9.0.42"
+            "version": "9.0.43"
           },
           {
             "name": "pickleshare",
@@ -4757,7 +4757,7 @@
           {
             "name": "pytz",
             "purl": "",
-            "version": "2025.2"
+            "version": "2026.5"
           },
           {
             "name": "pyyaml",
@@ -4837,7 +4837,7 @@
           {
             "name": "soupsieve",
             "purl": "",
-            "version": "4.0"
+            "version": "4.1"
           },
           {
             "name": "sql_metadata",
@@ -4847,7 +4847,7 @@
           {
             "name": "sqlglot",
             "purl": "",
-            "version": "30.29.0"
+            "version": "30.31.0"
           },
           {
             "name": "sqlite3",
@@ -4927,7 +4927,7 @@
           {
             "name": "typing-inspection",
             "purl": "",
-            "version": "0.4.4"
+            "version": "0.4.5"
           },
           {
             "name": "typing_extensions",
