@@ -1,11 +1,11 @@
 {
-  "generated": "2026-11-22T10:07:18Z",
+  "generated": "2026-11-25T10:21:41Z",
   "image": "erpnext",
   "tags": {
     "latest": {
-      "app_version": "15.126.0",
+      "app_version": "15.127.0",
       "arch": "amd64",
-      "generated": "2026-11-22T10:03:41Z",
+      "generated": "2026-11-25T10:17:32Z",
       "packages": {
         "dotnet": [],
         "freebsd": [
@@ -266,7 +266,7 @@
               "BSD2CLAUSE"
             ],
             "name": "aom",
-            "version": "3.15.3"
+            "version": "3.15.3_1"
           },
           {
             "licenses": [
@@ -407,7 +407,7 @@
               "MIT"
             ],
             "name": "brotli",
-            "version": "1.2.1,1"
+            "version": "1.2.1_1,1"
           },
           {
             "licenses": [
@@ -645,7 +645,8 @@
           },
           {
             "licenses": [
-              "ICU"
+              "BSD-3-Clause",
+              "Unicode-3.0"
             ],
             "name": "icu",
             "version": "76.1,1"
@@ -1103,7 +1104,7 @@
               "GPLv2"
             ],
             "name": "mariadb114-client",
-            "version": "11.4.13"
+            "version": "11.4.14"
           },
           {
             "licenses": [
@@ -1138,7 +1139,7 @@
               "BSD2CLAUSE"
             ],
             "name": "nginx",
-            "version": "1.30.6_18,3"
+            "version": "1.30.7,3"
           },
           {
             "licenses": [
@@ -1217,11 +1218,11 @@
               "BSD2CLAUSE"
             ],
             "name": "pkg",
-            "version": "2.9.2"
+            "version": "2.9.3"
           },
           {
             "licenses": [
-              "Libpng"
+              "libpng-2.0"
             ],
             "name": "png",
             "version": "1.6.59_1"
@@ -1440,7 +1441,7 @@
               "MIT"
             ],
             "name": "py312-pytz",
-            "version": "2026.5,1"
+            "version": "2026.6,1"
           },
           {
             "licenses": [
@@ -3169,7 +3170,7 @@
           {
             "name": "moment",
             "purl": "",
-            "version": "2.30.1"
+            "version": "2.31.0"
           },
           {
             "name": "moment-timezone",
@@ -4197,7 +4198,7 @@
           {
             "name": "charset-normalizer",
             "purl": "",
-            "version": "3.5.2"
+            "version": "3.5.3"
           },
           {
             "name": "click",
@@ -4277,7 +4278,7 @@
           {
             "name": "erpnext",
             "purl": "",
-            "version": "15.126.0"
+            "version": "15.127.0"
           },
           {
             "name": "et_xmlfile",
@@ -4312,7 +4313,7 @@
           {
             "name": "frappe",
             "purl": "",
-            "version": "15.127.1"
+            "version": "15.128.0"
           },
           {
             "name": "frappe-bench",
@@ -4847,7 +4848,7 @@
           {
             "name": "sqlglot",
             "purl": "",
-            "version": "30.33.0"
+            "version": "30.35.0"
           },
           {
             "name": "sqlite3",
@@ -4897,7 +4898,7 @@
           {
             "name": "tomli",
             "purl": "",
-            "version": "2.0.2"
+            "version": "2.3.2"
           },
           {
             "name": "tomli-w",
